@@ -2,6 +2,7 @@ import os
 import ably
 from flask import Flask
 from ably import AblyRealtime
+from flask_asgi import ASGIApp
 
 app = Flask(__name__)
 
@@ -24,7 +25,10 @@ def subscribe_to_channel():
 def start_subscription():
     subscribe_to_channel()
 
+# Wrap the app in ASGI
+asgi_app = ASGIApp(app)
+
 if __name__ == '__main__':
     # Use Uvicorn to run the app instead of Flask's built-in server
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=5000)
+    uvicorn.run(asgi_app, host="0.0.0.0", port=5000)
