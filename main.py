@@ -1,26 +1,30 @@
-import ably
 import os
-from flask import Flask, jsonify
+import ably
+from flask import Flask
+from ably import AblyRealtime
 
 app = Flask(__name__)
 
 # Initialize Ably Realtime client for WebSocket connection
-ably_client = ably.AblyRealtime(os.getenv('ABLY_KEY'))
+ably_client = AblyRealtime(os.getenv('ABLY_KEY'))
 
 # Set up Ably channel for real-time messaging
-# channel = ably_client.channels.get('trial')
+channel = ably_client.channels.get('trial')
 
 @app.route('/')
 def home():
     return "Flask App with Ably WebSockets for low latency!"
 
 # Subscribe to messages on the Ably channel
-#def subscribe_to_channel():
-#    channel.subscribe(lambda message: print(f"Received message: {message.data}"))
+def subscribe_to_channel():
+    channel.subscribe(lambda message: print(f"Received message: {message.data}"))
 
 # Run the subscription function when the app starts
-#with app.app_context():
-#    subscribe_to_channel()
+@app.before_first_request
+def start_subscription():
+    subscribe_to_channel()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Use Uvicorn to run the app instead of Flask's built-in server
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=5000)
