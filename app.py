@@ -5,7 +5,7 @@ from flask import Flask, jsonify
 app = Flask(__name__)
 
 # Initialize Ably Realtime client for WebSocket connection
-ably_client = ably.Realtime(os.getenv('ABLY_KEY'))
+ably_client = ably.AblyRealtime(os.getenv('ABLY_KEY'))
 
 # Set up Ably channel for real-time messaging
 channel = ably_client.channels.get('trial')
