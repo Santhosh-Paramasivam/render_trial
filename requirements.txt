@@ -2,3 +2,4 @@ Flask
 ably
 uvicorn
 flask-asgi
+gunicorn
