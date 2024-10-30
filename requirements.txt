@@ -1,3 +1,4 @@
 Flask
 ably
 gunicorn
+uvicorn
